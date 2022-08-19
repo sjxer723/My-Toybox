@@ -69,3 +69,4 @@ sparse/test-parsing
 sparse/test-show-type
 sparse/test-unssa
 sparse/version.h
+hello
