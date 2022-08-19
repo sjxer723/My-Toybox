@@ -50,3 +50,22 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Binary Files
+sparse/c2xml
+sparse/compile
+sparse/ctags
+sparse/example
+sparse/graph
+sparse/obfuscate
+sparse/semind
+sparse/sparse
+sparse/sparse-llvm
+sparse/test-dissect
+sparse/test-inspect
+sparse/test-lexing
+sparse/test-linearize
+sparse/test-parsing
+sparse/test-show-type
+sparse/test-unssa
+sparse/version.h
