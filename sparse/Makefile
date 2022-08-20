@@ -90,6 +90,7 @@ LIB_OBJS += tokenize.o
 LIB_OBJS += unssa.o
 LIB_OBJS += utils.o
 LIB_OBJS += version.o
+LIB_OBJS += call-graph.o
 
 PROGRAMS :=
 PROGRAMS += compile

@@ -3,26 +3,23 @@ V := @
 Q := $(V:1=)
 PROGRAMS = hello
 
-OBJ_LIBS = call-graph.o
-OBJ_LIBS += utils/hashmap.o
+UTILS_LIBS = ./utils/libutils.a
+SPARSE_LIBS = ./sparse/libsparse.a
 
-LIBS = ./sparse/libsparse.a
-
-all: $(OBJ_LIBS) $(PROGRAMS)
+all: $(PROGRAMS)
 	
-$(LIBS): sparse/*.c sparse/*.h
+$(SPARSE_LIBS): sparse/*.c sparse/*.h
 	@cd sparse && make && cd ../
 
-%.o: %.c
-	@echo "  CC      $@"
-	$(Q)$(CC) -c -o $@ $<
+$(UTILS_LIBS): utils/*.c utils/*.h
+	@cd utils && make && cd ../
 
-$(PROGRAMS):  % : %.o $(LIBS)
+$(PROGRAMS):  % : %.o $(SPARSE_LIBS) $(UTILS_LIBS)
 	@echo "  CC      $@"
-	$(Q)$(CC)  $^ $(LIBS) $(OBJ_LIBS) -o $@
+	$(Q)$(CC)  $^ $(SPARSE_LIBS) $(UTILS_LIBS) -o $@
 
 clean:
-	@rm -f $(PROGRAMS) && rm *.o
+	@rm -f *.[oa] .*.d $(PROGRAMS) utils/*.[oa] sparse/*.[oa]
 
 clean-sparse:
 	@cd sparse && make clean && cd ../
