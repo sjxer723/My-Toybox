@@ -1,1 +1,1 @@
-#define SPARSE_VERSION "v0.6.4"
+#define SPARSE_VERSION "0.6.4"

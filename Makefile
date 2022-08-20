@@ -2,15 +2,27 @@ CC = gcc
 V := @
 Q := $(V:1=)
 PROGRAMS = hello
+
+OBJ_LIBS = call-graph.o
+OBJ_LIBS += utils/hashmap.o
+
 LIBS = ./sparse/libsparse.a
 
-all: 
-	cd sparse && make && cd ../
-	make hello
+all: $(OBJ_LIBS) $(PROGRAMS)
+	
+$(LIBS): sparse/*.c sparse/*.h
+	@cd sparse && make && cd ../
 
-$(PROGRAMS):  % : %.o
+%.o: %.c
 	@echo "  CC      $@"
-	$(Q)$(CC)  $^ $(LIBS) -o $@
+	$(Q)$(CC) -c -o $@ $<
+
+$(PROGRAMS):  % : %.o $(LIBS)
+	@echo "  CC      $@"
+	$(Q)$(CC)  $^ $(LIBS) $(OBJ_LIBS) -o $@
 
 clean:
-	@rm -f $(PROGRAMS) && cd sparse && make clean && cd ../
+	@rm -f $(PROGRAMS) && rm *.o
+
+clean-sparse:
+	@cd sparse && make clean && cd ../
