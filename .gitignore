@@ -71,3 +71,4 @@ sparse/test-unssa
 sparse/test-call-graph
 sparse/version
 test/
+out/
