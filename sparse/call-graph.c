@@ -16,13 +16,14 @@ int generate_call_edges(struct entrypoint *ep, struct call_node *node,
     	struct instruction *insn_iter = NULL;
 
     	FOR_EACH_PTR(bb_iter->insns, insn_iter) {
-    		switch (insn_iter->opcode) {
-    		case OP_CALL:
-        		char *key = malloc(sizeof(char) * 100);
-        		const char *name = show_ident(insn_iter->func->ident);
-        		int err = MAP_OK;
-        		struct call_node *child = NULL;
+    		char *key = NULL;
+        	const char *name = show_ident(insn_iter->func->ident);;
+        	int err = MAP_OK;
+        	struct call_node *child = NULL;
 
+			switch (insn_iter->opcode) {
+    		case OP_CALL:
+        		key = malloc(sizeof(char) * 100);
         		if (!key) {
         			printf("Error: no avaiable memory space\n");
         			return 0;
