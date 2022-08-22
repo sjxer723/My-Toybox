@@ -1,3 +1,6 @@
 [submodule "xv6-labs-2021"]
 	path = xv6-labs-2021
 	url = https://github.com/sjxer723/xv6-labs-2021.git
+[submodule "riscv-simulator"]
+	path = riscv-simulator
+	url = https://github.com/sjxer723/riscv-simulator.git
