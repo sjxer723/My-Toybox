@@ -2,14 +2,17 @@
  * A unit test and example of how to use the simple C hashmap
  */
 #include <stdio.h>
-#include "sparse/lib.h"
-#include "sparse/linearize.h"
-#include "sparse/symbol.h"
-#include "sparse/expression.h"
-#include "sparse/call-graph.h"
-#include "utils/hashmap.h"
 #include <assert.h>
 #include "string.h"
+#include "lib.h"
+#include "linearize.h"
+#include "symbol.h"
+#include "expression.h"
+#include "call-graph.h"
+#include "hashmap.h"
+
+extern struct call_node *main_node;
+extern struct ident *main_id;
 
 int main(int argc, char **argv)
 {
@@ -28,6 +31,8 @@ int main(int argc, char **argv)
 	FOR_EACH_PTR(filelist, file){
         syms = sparse(file);
 	    FOR_EACH_PTR(syms, sym) {
+			if(!sym) continue;
+
 	    	expand_symbol(sym);
 	    	ep = linearize_symbol(sym);
 			if (ep)
@@ -37,12 +42,16 @@ int main(int argc, char **argv)
 
 				snprintf(key, sizeof(name), name);
 				error = hashmap_get(map, key, (any_t *)&node);
-				printf("error = %d\n", error);
-				if(error == MAP_MISSING){
+				if(error != MAP_OK){
 					node = alloc_call_node(ep->name->ident);
 					hashmap_put(map, key, (any_t)node);
 				}
-	    		show_entry(ep);
+
+				if(strcmp("main", show_ident(sym->ident))){
+					main_id = sym->ident;
+					main_node = node;
+				}
+	    		//show_entry(ep);
 				generate_call_edges(ep, node, map);
 			}
 	    } END_FOR_EACH_PTR(sym);

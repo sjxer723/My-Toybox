@@ -91,6 +91,7 @@ LIB_OBJS += unssa.o
 LIB_OBJS += utils.o
 LIB_OBJS += version.o
 LIB_OBJS += call-graph.o
+LIB_OBJS += hashmap.o
 
 PROGRAMS :=
 PROGRAMS += compile
@@ -105,6 +106,7 @@ PROGRAMS += test-linearize
 PROGRAMS += test-parsing
 PROGRAMS += test-show-type
 PROGRAMS += test-unssa
+PROGRAMS += test-call-graph
 
 INST_PROGRAMS=sparse cgcc
 INST_MAN1=sparse.1 cgcc.1

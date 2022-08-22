@@ -3,7 +3,7 @@
 #include "expression.h"
 #include "allocate.h"
 #include "ptrlist.h"
-#include "../utils/hashmap.h"
+#include "hashmap.h"
 
 #ifndef CALL_GRAPH_H
 #define CALL_GRAPH_H

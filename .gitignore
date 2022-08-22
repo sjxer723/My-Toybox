@@ -68,5 +68,6 @@ sparse/test-linearize
 sparse/test-parsing
 sparse/test-show-type
 sparse/test-unssa
+sparse/test-call-graph
 sparse/version
-hello
+test/
