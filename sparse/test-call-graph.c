@@ -14,6 +14,12 @@
 extern struct call_node *main_node;
 extern struct ident *main_id;
 
+static void show_call_graph_data(map_t map)
+{
+	fprintf(stdout, "Number of nodes in Call graph:                %d\n", hashmap_length(map));
+	fprintf(stdout, "Number of reachable nodes in Call graph:      %d\n", get_reachable_nodes_num(map));
+}
+
 int main(int argc, char **argv)
 {
 	struct string_list *filelist = NULL;
@@ -47,7 +53,7 @@ int main(int argc, char **argv)
 					hashmap_put(map, key, (any_t)node);
 				}
 
-				if(strcmp("main", show_ident(sym->ident))){
+				if(!strcmp("main", show_ident(sym->ident))){
 					main_id = sym->ident;
 					main_node = node;
 				}
@@ -56,6 +62,7 @@ int main(int argc, char **argv)
 			}
 	    } END_FOR_EACH_PTR(sym);
     }END_FOR_EACH_PTR(file);
+ 	show_call_graph_data(map);
 
 	return 0;
 }

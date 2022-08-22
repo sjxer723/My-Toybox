@@ -15,15 +15,18 @@ DECLARE_PTR_LIST(call_node_list, struct call_node);
 struct call_node {
     struct ident* id;
     struct call_node_list* neighbors;
+    int visited;
 };
 
 int generate_call_edges(struct entrypoint * ep, struct call_node *node, map_t map);
 void show_call_graph(struct symbol_list* syms);
+int get_reachable_nodes_num(map_t map);
 
 static struct call_node* alloc_call_node(struct ident* id)
 {   
     struct call_node* node = malloc(sizeof(struct call_node));
     node ->id = id;
+    node ->visited = 0;
     return node;
 }
 
