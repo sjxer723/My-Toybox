@@ -69,6 +69,6 @@ sparse/test-parsing
 sparse/test-show-type
 sparse/test-unssa
 sparse/test-call-graph
-sparse/version
+sparse/version.h
 test/
 out/
