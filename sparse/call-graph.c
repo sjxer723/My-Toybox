@@ -17,19 +17,21 @@ int generate_call_edges(struct entrypoint *ep, struct call_node *node,
 
     	FOR_EACH_PTR(bb_iter->insns, insn_iter) {
     		char *key = NULL;
-        	const char *name = show_ident(insn_iter->func->ident);;
-        	int err = MAP_OK;
+        	const char *name;
+			int err = MAP_OK;
         	struct call_node *child = NULL;
 
+	
 			switch (insn_iter->opcode) {
     		case OP_CALL:
         		key = malloc(sizeof(char) * 100);
-        		if (!key) {
+        		name = show_ident(insn_iter->func->ident);
+				if (!key) {
         			printf("Error: no avaiable memory space\n");
         			return 0;
         		}
         		snprintf(key, sizeof(name), name);
-        		err = hashmap_get(map, key, (any_t *)&child);
+				err = hashmap_get(map, key, (any_t *)&child);
         		if (err != MAP_OK) {
         			child = alloc_call_node(insn_iter->func->ident);
         			hashmap_put(map, key, child);

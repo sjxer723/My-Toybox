@@ -8,9 +8,6 @@
 #ifndef CALL_GRAPH_H
 #define CALL_GRAPH_H
 
-struct call_node;
-
-DECLARE_PTR_LIST(call_node_list, struct call_node);
 
 struct call_node {
     struct ident* id;
@@ -18,13 +15,15 @@ struct call_node {
     int visited;
 };
 
+DECLARE_PTR_LIST(call_node_list, struct call_node);
+
 int generate_call_edges(struct entrypoint * ep, struct call_node *node, map_t map);
 void show_call_graph(struct symbol_list* syms);
 int get_reachable_nodes_num(map_t map);
 
 static struct call_node* alloc_call_node(struct ident* id)
 {   
-    struct call_node* node = malloc(sizeof(struct call_node));
+    struct call_node* node = __alloc_call_node(0);
     node ->id = id;
     node ->visited = 0;
     return node;

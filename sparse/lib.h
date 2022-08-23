@@ -71,6 +71,7 @@ struct entrypoint;
 struct instruction;
 struct multijmp;
 struct pseudo;
+struct call_node;
 
 DECLARE_PTR_LIST(symbol_list, struct symbol);
 DECLARE_PTR_LIST(statement_list, struct statement);

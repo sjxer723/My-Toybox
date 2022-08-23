@@ -42,6 +42,7 @@
 #include "scope.h"
 #include "expression.h"
 #include "linearize.h"
+#include "call-graph.h"
 
 void protect_allocations(struct allocator_struct *desc)
 {
@@ -152,5 +153,4 @@ ALLOCATOR(entrypoint, "entrypoint");
 ALLOCATOR(instruction, "instruction");
 ALLOCATOR(multijmp, "multijmp");
 ALLOCATOR(pseudo, "pseudo");
-
-
+ALLOCATOR(call_node, "call_node");

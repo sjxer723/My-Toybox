@@ -1,4 +1,6 @@
 # copy test input
+if [ ! -d 'test/' ]; then mkdir 'test/'; fi
+if [ ! -d 'out/' ]; then mkdir 'out/'; fi
 if [ -f ./testcases/$@.c ]; then cp ./testcases/$@.c ./test/test.c; cp ./testcases/io.inc ./test/; fi
 # copy test output
 #if [ -f ./testcase/$@.ans ]; then cp ./testcase/$@.ans ./test/test.ans; fi

@@ -24,3 +24,4 @@ $(CPU): riscv-simulator/*.hpp riscv-simulator/*.cpp riscv-simulator/Pipeline/*.h
 clean:
 	@cd sparse && make clean && cd ../
 	@cd riscv-simulator && rm -rf build && cd ../
+	@rm -rf out && rm -rf test
