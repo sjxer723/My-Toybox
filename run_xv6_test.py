@@ -4,7 +4,9 @@ import argparse
 import time
 
 def run_xv6_test(outdir):
-    os.system('cd xv6-labs-2021/ && rm fs.img && make qemu >../{}'.format(outdir))
+    if os.path.exists('./xv6-labs-2021/fs.img'):
+        os.system('rm ./xv6-labs-2021/fs.img')
+    os.system('cd xv6-labs-2021/ && make qemu >../{}'.format(outdir))
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -27,7 +29,7 @@ if __name__ == '__main__':
     os.system('cp testcases/{}.c ./xv6-labs-2021/user/test.c'.format(args.test))
     os.system('cp testcases/io.inc ./xv6-labs-2021/user/'.format(args.test))
     if os.fork() > 0: 
-        time.sleep(5)
+        time.sleep(10)
         os.system('killall qemu-system-riscv64')
         print("Close child process successfully!")
         with open(args.logdir) as f:

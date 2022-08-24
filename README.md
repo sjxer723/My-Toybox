@@ -1,7 +1,7 @@
 # My-Toybox
-In real-world programming, sometimes we want to know why our algorithms or programs run slowly. In this case, we may rely on some tools to monitor the runtime behaviors of our programs (e.g., `strace`, `gdb`, `perf`, etc). They may offer us some useful information. For example, if we call lots of system calls, the program may waste a lot of time of the switch of kernel and user mode. Unfortunately, no such tools can provide everything we want. 
+In real-world programming, sometimes we want to find out why our programs run slowly. In this case, we may rely on some tools to monitor the runtime behaviors of our programs (e.g., `strace`, `gdb`, `perf`, etc). They will offer us some useful information, which is helpful for imporving our programs. For example, if we call lots of system calls, the program may waste a lot of time on switching between kernel and user mode. Unfortunately, no such tools can provide everything we want. 
 
-In this project, I provide a program analysis platform, which can automatically monitor the runtime behaviors of programs (e.g., function calls, branch condition, etc). 
+For this reason, I provide a program analysis platform in the project, which can automatically monitor the runtime behaviors of programs (e.g., function calls, branch condition, etc). 
 
 -----
 
@@ -35,7 +35,8 @@ To begin with this project, you can configure the enviroment via the following s
 ## Main Design
 
 Firstly, it needs to be mention that I reuse two open-source repo: `Sparse` and `xv6`, and a risc-v cpu simulator for my [PPCA (2020 summer)](https://acm.sjtu.edu.cn/wiki/PPCA_2020) assignment. Main design is shown in the following figure,
-<img src="design.png" width="60%" align="center">
+
+<center><img src="design.png" width="60%"></center>
 
 * `Sparse` is a linux kernel static analysis tool, which looks like a compiler. It accepts C source codes as input and output their possible bugs. The source codes are first converted into AST, and then be linearized to CFG.
 
@@ -68,52 +69,69 @@ Detailed implementation of each metric are shown below:
 
 * For **execution times**, I measure how many cycles the binary files cost. This is because I just run the binary files on cpu simulator, so I can not calculate its accurate clock frequency. 
 
-* For the number of **function calls**, 
+* For the number of **function calls**, each function call will correspond a `jal/jalr` instruction. Since my platform does not support programmers write `goto` statement, there will be no other behaviors leading to a `jal` or `jalr` instruction. Therefore, the number of functions calls is equal to the total number of executed `jal` and `jalr` instructions.
 
 
-## Example Output
+## Test
 
-Take the `array_test1` for example, run command `sh run_all_tests.sh array_test1`, we can see the following output in `out/final_report.txt`:
+* Before runing test cases, please first build the project with the following command:
 
-    Execution result:                             123
-    Total executing time:                         216(cycles)
-    Success branch prediction:                    10
-    Total branch cnnditions:                      22
-    Successful conditional prediction  rate:      0.45
-    Call Edge: caller: main --> callee: printInt
-    Call Edge: caller: main --> callee: printInt
-    Number of nodes in Call graph:                3
-    Number of reachable nodes in Call graph:      2
-    Number of syscall:                            2
+        $ cd ~/My-Toybox
+        $ make
 
-Take the `qsort` for example, run command `sh run_all_tests.sh qsort`, we can see the following output in `out/final_report.txt`:
+* All the test cases are stored in folder `testcases/`, each test case is consist of one `.c` file and its corresponding assembly file (ended with `.dump` and use RV32I assembly language) and binary file (ended with `.data`). These test samples are provided by my CPU design course. 
 
-    Execution result:                             105
-    Total executing time:                         1348112(cycles)
-    Success branch prediction:                    146999
-    Total branch cnnditions:                      200045
-    Successful conditional prediction  rate:      0.73
-    Call Edge: caller: qsrt --> callee: qsrt
-    Call Edge: caller: qsrt --> callee: qsrt
-    Call Edge: caller: main --> callee: qsrt
-    Call Edge: caller: main --> callee: printInt
-    Call Edge: caller: main --> callee: printStr
-    Call Edge: caller: main --> callee: printStr
-    Number of nodes in Call graph:                4
-    Number of reachable nodes in Call graph:      4
-    Number of syscall:                            2
 
-Take the `superloop` for example, run command `sh run_all_tests.sh superloop`, we can see the following output in `out/final_report.txt`:
+* To run one of those test cases, please just run a command in the following pattern:
 
-    Execution result:                             134
-    Total executing time:                         542079(cycles)
-    Success branch prediction:                    374976
-    Total branch cnnditions:                      435027
-    Successful conditional prediction  rate:      0.86
-    Call Edge: caller: main --> callee: printInt
-    Number of nodes in Call graph:                3
-    Number of reachable nodes in Call graph:      2
-    Number of syscall:                            2
+        sh run_all_test.sh <testcase name>
+
+    Take the `array_test1` for example, run command `sh run_all_tests.sh array_test1`, we can see the following output in `out/final_report.txt`:
+
+        Execution result:                             123
+        Total executing time:                         216(cycles)
+        Funtion call times:                           22
+        Success branch prediction:                    10
+        Total branch cnnditions:                      22
+        Successful conditional prediction  rate:      0.45
+        Call Edge: caller: main --> callee: printInt
+        Call Edge: caller: main --> callee: printInt
+        Number of nodes in Call graph:                3
+        Number of reachable nodes in Call graph:      2
+        Number of syscall:                            2
+
+    Take the `qsort` for example, run command `sh run_all_tests.sh qsort`, we can see the following output in `out/final_report.txt`:
+
+        Execution result:                             105
+        Total executing time:                         1348112(cycles)
+        Funtion call times:                           68626
+        Success branch prediction:                    146999
+        Total branch cnnditions:                      200045
+        Successful conditional prediction  rate:      0.73
+        Call Edge: caller: qsrt --> callee: qsrt
+        Call Edge: caller: qsrt --> callee: qsrt
+        Call Edge: caller: main --> callee: qsrt
+        Call Edge: caller: main --> callee: printInt
+        Call Edge: caller: main --> callee: printStr
+        Call Edge: caller: main --> callee: printStr
+        Number of nodes in Call graph:                4
+        Number of reachable nodes in Call graph:      4
+        Number of syscall:                            2
+
+    
+    Take the `superloop` for example, run command `sh run_all_tests.sh superloop`, we can see the following output in `out/final_report.txt`:
+
+        Execution result:                             134
+        Total executing time:                         542079(cycles)
+        Funtion call times:                           10060
+        Success branch prediction:                    374976
+        Total branch cnnditions:                      435027
+        Successful conditional prediction  rate:      0.86
+        Call Edge: caller: main --> callee: printInt
+        Number of nodes in Call graph:                3
+        Number of reachable nodes in Call graph:      2
+        Number of syscall:                            2
+
 ## Limitations and Possible Improvements
 
 **Limitation:**
